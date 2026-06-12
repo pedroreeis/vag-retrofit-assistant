@@ -1,0 +1,18 @@
+O que temos na v1?
+
+1. Identificação de rom id.
+2. Relacionar rom id com patch listado.
+3. aplicação do patch 
+4. hex viewer
+
+O que precisamos fazer para a v2?
+
+1. Adicionar suporte para patchs de outros módulos além do painel de instrumentos, mesmo que isso signifique criar um painel de adição para o operador adicionar cada um.
+   (
+    46 - Confort Module (Windows close with lock button, window open with unlock button, etc),
+    17 - Instruments (Welcome message, distance to empty, etc),
+    etc
+   )
+2. Adicionar um "Checksum calculator & validation" para não ter riscos do erro dEF.
+
+3. Incorporar funções do kw1281test(https://github.com/gmenounos/kw1281test) feito em C#, mas é referência em manipulação de eprom (Load, Dump, Upload, Read, etc).

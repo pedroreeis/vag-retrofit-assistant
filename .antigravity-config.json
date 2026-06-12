@@ -1,0 +1,13 @@
+{
+  "language_profile": "java",
+  "runtime_path": "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+  "frameworks": ["spring-boot", "junit", "maven"],      
+  "linting": {
+    "enabled": true,
+    "strict_mode": true
+  },
+  "agent_behavior": {
+    "prefer_unit_tests": true,
+    "document_code": true
+  }
+}

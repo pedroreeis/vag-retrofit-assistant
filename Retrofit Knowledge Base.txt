@@ -1,0 +1,143 @@
+# **Retrofit Knowledge Base**
+
+## **CAPÍTULO 1: PLATAFORMAS**
+
+*   **PQ34**
+    *   **Veículos:** VW Golf MK4 (1J), Bora/Jetta MK4, New Beetle, Audi A3 (8L), Seat Leon/Toledo (1M).
+    *   **Compatibilidades:** Arquitetura híbrida **K-Line (diagnóstico principal)** + **CAN Powertrain** (Motor, ABS, Painel). Versões tardias (MK4.5 brasileiro) possuem integração CAN mais forte.
+    *   **Observações:** O painel de instrumentos atua como o **mestre do sistema de imobilizador**. A comunicação de conforto nesta plataforma é frequentemente via K-Line ou CAN de baixa velocidade limitada.
+
+*   **PQ35**
+    *   **Veículos:** VW Jetta 2008 MK5 (2006-2010).
+    *   **Compatibilidades:** Totalmente baseada em **CAN Bus** para diagnóstico e configuração. Utiliza **Long Coding** para a maioria das funções.
+    *   **Observações:** Introduz o uso do **Long Coding Helper** e Gateways dedicados com **Installation List**.
+
+---
+
+## **CAPÍTULO 2: PAINÉIS**
+
+### **VDO**
+*   **Part Number:** **1J0 920 825 A**
+    *   **Versão de software:** V04.
+    *   **Tipo de EEPROM:** Externa, provavelmente **24C02** (2048 bytes).
+    *   **IMMO:** **IMMO2**.
+    *   **Recursos conhecidos:** Needle Sweep (via patch firmware), alteração de escala, ColorMFA.
+    *   **Limitações conhecidas:** MCU Motorola HC08 lenta; pouca RAM; sem gateway CAN moderno.
+
+*   **Part Number:** **1JE 920 846 F**
+    *   **Versão de software:** V01.
+    *   **Tipo de EEPROM:** DESCONHECIDO.
+    *   **IMMO:** **IMMO3**.
+    *   **Recursos conhecidos:** Full FIS; funciona como **pseudo-gateway CAN**; Needle Sweep; menus ocultos.
+    *   **Limitações conhecidas:** MCU antiga em comparação com PQ35; RAM limitada.
+
+*   **Part Number:** **1J0 920 806 C**
+    *   **Versão de software:** V07.
+    *   **Tipo de EEPROM:** DESCONHECIDO.
+    *   **IMMO:** **IMMO2**.
+    *   **Recursos conhecidos:** Básico (sem FIS).
+    *   **Limitações conhecidas:** Extremamente limitado para hacks; sem integração de navegação ou menus CAN.
+
+### **Motometer**
+*   **Part Number:** DESCONHECIDO.
+*   **Versão de software:** DESCONHECIDO.
+
+### **Magneti Marelli**
+*   **Part Number:** DESCONHECIDO (Painéis). Note: ECUs Magneti Marelli 4MV/4LV são documentadas na plataforma PQ34.
+
+---
+
+## **CAPÍTULO 3: MAPAS EEPROM**
+
+*   **Endereço 0x4F4:** Início dos dados para patches de Needle Sweep (quando um patch de fábrica ou customizado existe).
+*   **Endereço 0x4F8 – 0x4F9:** Localização do **ROM ID** do painel.
+*   **Endereço 0x0000 – 0x00FF:** Área de **Coding e Configuração** em painéis IMMO2 (Ex: 825A).
+*   **Bloco IMMO:** Contém VIN, PIN (SKC) e dados de chaves; endereço exato DESCONHECIDO.
+*   **Odometer:** Dados de quilometragem; endereço exato DESCONHECIDO.
+
+---
+
+## **CAPÍTULO 4: PATCHES**
+
+*   **Nome:** **Needle Sweep (Varredura de Ponteiros)**
+    *   **Objetivo:** Realizar a varredura completa dos ponteiros ao ligar a ignição.
+    *   **Painéis compatíveis:** Midline (MFA meio FIS) ou Highline (Full FIS) com software **VWK501MH**.
+    *   **Versões compatíveis (ROM ID):** **00A4** (SW 01.00), **10A4** (SW 01.10), **92A3** (SW 00.92).
+    *   **Bytes alterados:** Sequência hexadecimal inserida a partir do endereço **0x4F4**.
+    *   **Pré-requisitos:** Backup da EEPROM; identificação correta do ROM ID via etiqueta ou dump.
+    *   **Limitações:** Não funciona em painéis Lowline (sem display central). Requer que as agulhas estejam zeradas e voltagem adequada para ativar.
+    *   **Fonte:** Graeme's Webspace, hayperek.pl.
+
+---
+
+## **CAPÍTULO 5: CHECKSUMS**
+
+*   **Algoritmo conhecido:** DESCONHECIDO.
+*   **Painéis suportados:** Painéis VDO (plataforma PQ34) possuem checksums internos para integridade da EEPROM e FLASH.
+*   **Limitações:** Algumas revisões VDO possuem **múltiplos checksums**. Se o checksum for gravado incorretamente, o painel exibirá o erro **"dEF"** no odômetro e poderá entrar em bootloop ou travar ponteiros.
+*   **Fonte:** Texto colado.
+
+---
+
+## **CAPÍTULO 6: CODINGS**
+
+*   **Painéis (Endereço 17):**
+    *   **Plataforma PQ34:** Codificação curta (Soft Coding). Exemplos: **17502**, **07502**, **00502**.
+    *   **Plataforma PQ35:** Long Coding via Adaptation para animações de ponteiros.
+
+*   **Conforto (Endereço 46):**
+    *   **Plataforma PQ34:** Códigos **00256/00257** (2 portas) ou **04096/04097** (4 portas) definem travamento seletivo vs. universal.
+    *   **Plataforma PQ35:** **Byte 2, Bit 2** habilita conforto via controle remoto; **Byte 0, Bit 0** habilita Auto Lock.
+
+*   **Luzes/Elétrica Central (Endereço 09 - PQ35):**
+    *   **Coming/Leaving Home (sem sensor):** Byte 23, Bit 4.
+    *   **DRL via Neblina:** Byte 7, Bit 6.
+    *   **Modo Norte-Americano (Lanternas):** Byte 8, Bit 2.
+
+*   **ABS (Endereço 03):**
+    *   **Luz de Freio de Emergência (PQ35):** Módulo 09, Byte 19, Bit 0.
+    *   **Sensibilidade ESP:** Via Adaptation.
+
+---
+
+## **CAPÍTULO 7: RETROFITS**
+
+*   **ColorMFA**
+    *   **Veículos compatíveis:** Golf MK4, Bora, Passat B5.
+    *   **Dependências:** Exige painel compatível (preferencialmente VDO IMMO3 Full FIS).
+    *   **Observações:** Transformação visual mais profunda para PQ34; integra menus modernos e leitura de sensores extras.
+
+*   **Cruise Control (Piloto Automático)**
+    *   **Veículos compatíveis:** Motores com acelerador eletrônico (Drive-by-Wire).
+    *   **Peças:** Stalk (alavanca) correta e chicote para a ECU.
+    *   **Codificações:** Ativação via VCDS no Módulo 01 (Engine) em Adaptation.
+
+*   **Climatronic OEM**
+    *   **Veículos compatíveis:** PQ34.
+    *   **Observações:** Alta compatibilidade, especialmente em painéis IMMO3 Full FIS (possível integração no display).
+
+---
+
+## **CAPÍTULO 8: MATRIZ DE COMPATIBILIDADE**
+
+| Recurso | Painel IMMO2 (825A) | Painel IMMO3 (846F) | Plataforma PQ35 (MK5) |
+| :--- | :--- | :--- | :--- |
+| **Needle Sweep** | Possível (HC08 Patch) | Nativo/Patch EEPROM | Adaptation |
+| **ColorMFA** | Compatível | Ideal | Incompatível (Nativo) |
+| **Auto Lock** | Adaptation Canais 03/04 | Adaptation Canais 03/04 | Long Coding Byte 0 |
+| **Remote Windows** | Depende do Módulo 46 | Suporte Amplo | Byte 2 Bit 2 |
+| **Gateway List** | Inexistente | Pseudo-gateway | Nativo (Endereço 19) |
+
+---
+
+## **CAPÍTULO 9: INCERTEZAS E CONFLITOS**
+
+*   **Conflito de Ativação Needle Sweep (PQ34):**
+    *   **Fonte A (Graeme's):** Afirma que o patch é uma simples atualização dos dados da EEPROM para o MCU Micronas.
+    *   **Fonte B (Texto Colado):** Afirma que em painéis IMMO2 (como o 825A), a rotina depende do **firmware interno do MCU Motorola HC08** e que "não existe byte mágico na EEPROM" para ativá-lo sem ler a memória FLASH do processador.
+
+*   **Localização do PIN/SKC:**
+    *   **Informação Incompleta:** Fontes mencionam que o PIN tem 4 dígitos (IMMO2/IMMO3), mas o procedimento exato de extração via dump (offsets específicos) é **DESCONHECIDO**, sendo citado apenas que softwares externos são necessários para a leitura.
+
+*   **Compatibilidade 01M e CAN:**
+    *   **Informação sem confirmação:** A integração do câmbio automático 01M com retrofits CAN modernos é descrita como "limitada" e "antiga", mas o impacto técnico exato em Gateways customizados é **DESCONHECIDO**.

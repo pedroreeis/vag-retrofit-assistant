@@ -2,8 +2,7 @@
 
 Uma ferramenta especializada para engenharia reversa, análise e aplicação segura de patches em memórias EEPROM de painéis do grupo VAG (Volkswagen, Audi, Seat, Skoda) — projetada com uma interface moderna inspirada no **VCDS** e foco extremo em **segurança e validação**.
 
-![Screenshot do VAG Retrofit Assistant](https://via.placeholder.com/1000x600.png?text=VAG+Retrofit+Assistant+V2+-+UI)
-*(Substitua este placeholder por uma screenshot real da aplicação rodando com o tema escuro).*
+![Screenshot do VAG Retrofit Assistant](https://raw.githubusercontent.com/pedroreeis/vag-retrofit-assistant/refs/heads/main/screenshots/1.png)
 
 ## ⚠️ Aviso de Responsabilidade
 > [!CAUTION]
@@ -13,8 +12,9 @@ Uma ferramenta especializada para engenharia reversa, análise e aplicação seg
 
 ## 🛠 Funcionalidades Principais
 
-* **Modificação Guiada de EEPROM**: Aplica patches conhecidos (como *Needle Sweep / Staging*, *Welcome Message*, *Luzes de Painel*, etc.) em dumps de painéis (ex: Golf Mk4, Passat B5, Bora).
-* **Gerenciador de Base de Conhecimento (KB)**: Uma biblioteca interativa de padrões hexadecimais, separada por endereço de módulo VAG (ex: `17 - Instruments`, `46 - Comfort System`). 
+* **Modificação Guiada de EEPROM**: Aplica patches conhecidos (como *Needle Sweep / Staging*, *Welcome Message*, *Luzes de Painel*, etc.) em dumps de painéis (ex: Golf Mk4, Passat B5, Bora). ![Screenshot do VAG Retrofit Assistant](https://raw.githubusercontent.com/pedroreeis/vag-retrofit-assistant/refs/heads/main/screenshots/2.png)
+* **Gerenciador de Base de Conhecimento (KB)**: Uma biblioteca interativa de padrões hexadecimais, separada por endereço de módulo VAG (ex: `17 - Instruments`, `46 - Comfort System`).
+* **Hex Viewer**: Um visualizador de hexadecimais para visualização rápida do dump. ![Screenshot do VAG Retrofit Assistant](https://raw.githubusercontent.com/pedroreeis/vag-retrofit-assistant/refs/heads/main/screenshots/3.png)
 * **Custom Patches do Operador**: Permite aos usuários cadastrarem seus próprios patches testados e salvá-los localmente em banco de dados SQLite embutido.
 * **Comunicação Direta via K-Line (KW1281)**: Não é necessário remover o painel ou dessoldar a EEPROM! Usando um simples cabo **KKL USB (FTDI/CH340)**, você pode ler e escrever no módulo através da porta OBD2.
 * **Sistema de Auditoria em Tempo Real**: Todo patch aplicado e toda sessão OBD tem os logs e hashes gravados localmente em `~/.vagretrofit/audit` para histórico de segurança.

@@ -61,6 +61,7 @@ public class App extends Application {
     private Label statusLabel;
     private Label dumpInfoLabel;
     private TabPane mainTabPane;
+    private Button btnMaximize; // botão maximize do chrome customizado
 
     // Patch tab controls
     private TextArea patchLogArea;
@@ -181,7 +182,7 @@ public class App extends Application {
 
         // ── Botões de controle de janela ──────────────────────────────────────
         Button btnMinimize = new Button("–"); // minimizar
-        Button btnMaximize = new Button("□"); // maximizar / restaurar
+        btnMaximize = new Button("□"); // maximizar / restaurar
         Button btnClose = new Button("✕"); // fechar
 
         btnMinimize.getStyleClass().addAll("wm-btn", "wm-minimize");
